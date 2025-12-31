@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Anniversary Surprise</title>
+
+<style>
+/* รีเซ็ตค่าเริ่มต้นของทุก element */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* พื้นหลังหลักของเว็บ */
+body{
+    background: linear-gradient(180deg,#f3e6ff,#e0c7ff);
+    overflow:hidden;
+}
+
+/* ---------------- หน้าใส่รหัส ---------------- */
+#lockScreen{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(180deg,#e9d6ff,#cfa8ff);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:10;
+}
+
+/* กล่องใส่รหัส */
+.lock-box{
+    background:rgba(255,255,255,0.35);
+    padding:30px;
+    border-radius:20px;
+    backdrop-filter:blur(10px);
+    text-align:center;
+    box-shadow:0 0 30px rgba(160,80,255,0.4);
+}
+
+/* หัวข้อ */
+.lock-box h2{
+    color:#6a1bb1;
+    margin-bottom:15px;
+}
+
+/* ช่องกรอกรหัส */
+.lock-box input{
+    padding:10px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    outline:none;
+    text-align:center;
+    width:160px;
+}
+
+/* ปุ่มยืนยัน */
+.lock-box button{
+    margin-top:15px;
+    padding:10px 25px;
+    border:none;
+    border-radius:20px;
+    background:#8a3dff;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+/* ---------------- หน้าหัวใจ ---------------- */
+#heartScreen{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(180deg,#e6ccff,#d1aaff);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:9;
+}
+
+/* หัวใจใหญ่ */
+.big-heart{
+    font-size:120px;
+    color:#8a3dff;
+    transition:transform 0.2s;
+}
+
+/* ---------------- หน้าตัดจอ ---------------- */
+#transition{
+    position:fixed;
+    inset:0;
+    background:black;
+    display:none;
+    z-index:8;
+}
+
+/* ดาวระยิบระยับ */
+.star{
+    position:absolute;
+    width:4px;
+    height:4px;
+    background:white;
+    border-radius:50%;
+    animation:twinkle 2s infinite;
+}
+
+/* แอนิเมชันดาว */
+@keyframes twinkle{
+    0%{opacity:0}
+    50%{opacity:1}
+    100%{opacity:0}
+}
+
+/* ---------------- หน้าการ์ด (เหมือนเดิม) ---------------- */
+#main{
+    display:none;
+    position:relative;
+    height:100vh;
+    width:100vw;
+    background:linear-gradient(180deg,#d9b8ff,#b985ff);
+}
+
+/* กล่องข้อความ */
+.card{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(120,60,180,0.35);
+    padding:15px 25px;
+    border-radius:20px;
+    color:white;
+    backdrop-filter:blur(10px);
+}
+
+/* ตัวอย่างข้อความ */
+.card h1{
+    font-size:22px;
+}
+
+/* รูปลอย */
+.float-img{
+    position:absolute;
+    width:80px;
+    animation:float 12s linear infinite;
+}
+
+/* แอนิเมชันลอย */
+@keyframes float{
+    from{transform:translateY(100vh)}
+    to{transform:translateY(-120px)}
+}
+
+/* หัวใจลอย */
+.heart{
+    position:absolute;
+    color:#8a3dff;
+    animation:float 10s linear infinite;
+}
+</style>
+</head>
+
+<body>
+
+<!-- หน้าใส่รหัส -->
+<div id="lockScreen">
+    <div class="lock-box">
+        <h2>ใส่รหัสเพื่อเข้า 💜</h2>
+        <input id="pass" type="password" placeholder="รหัส">
+        <br>
+        <button onclick="checkPass()">ยืนยัน</button>
+        <p id="msg"></p>
+    </div>
+</div>
+
+<!-- หน้าหัวใจ -->
+<div id="heartScreen">
+    <div id="heart" class="big-heart">💜</div>
+    <p style="color:#5b1899">แตะหน้าจอให้หัวใจเต็ม</p>
+</div>
+
+<!-- หน้าตัดจอ -->
+<div id="transition"></div>
+
+<!-- หน้าการ์ดหลัก -->
+<div id="main">
+    <div class="card">
+        <h1>1Y • 08/02/25 💜</h1>
+        <p>สุขสันต์วันครบรอบ</p>
+    </div>
+</div>
+
+<script>
+/* ตัวแปรเก็บจำนวนครั้ง */
+let tries = 0;
+
+/* ตรวจรหัส */
+function checkPass(){
+    const pass = document.getElementById("pass").value;
+    const msg = document.getElementById("msg");
+
+    tries++;
+
+    if(pass === "080225"){
+        document.getElementById("lockScreen").style.display="none";
+        document.getElementById("heartScreen").style.display="flex";
+    }else{
+        msg.innerText="รหัสไม่ถูกต้อง";
+        if(tries>=10){
+            msg.innerText="ครบ 10 ครั้งแล้ว";
+        }
+    }
+}
+
+/* หัวใจเพิ่ม */
+let heartCount = 0;
+document.getElementById("heartScreen").addEventListener("click",()=>{
+    heartCount++;
+    const heart = document.getElementById("heart");
+    heart.style.transform=`scale(${1+heartCount*0.02})`;
+
+    if(heartCount>=30){
+        startTransition();
+    }
+});
+
+/* ตัดจอ + ดาว */
+function startTransition(){
+    document.getElementById("heartScreen").style.display="none";
+    const t = document.getElementById("transition");
+    t.style.display="block";
+
+    for(let i=0;i<100;i++){
+        const s=document.createElement("div");
+        s.className="star";
+        s.style.left=Math.random()*100+"vw";
+        s.style.top=Math.random()*100+"vh";
+        t.appendChild(s);
+    }
+
+    setTimeout(()=>{
+        t.style.display="none";
+        document.getElementById("main").style.display="block";
+        spawnEffects();
+    },3000);
+}
+
+/* เอฟเฟคลอย */
+function spawnEffects(){
+    for(let i=0;i<10;i++){
+        const img=document.createElement("div");
+        img.className="heart";
+        img.innerText="💜";
+        img.style.left=Math.random()*100+"vw";
+        img.style.fontSize="30px";
+        document.getElementById("main").appendChild(img);
+    }
+}
+</script>
+
+</body>
+</html>
